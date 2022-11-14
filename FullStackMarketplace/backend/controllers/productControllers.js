@@ -26,13 +26,14 @@ const getProductsById = async (req, res) => {
 }
 
 const createProduct = async (req, res) => {
-    const { id, name, description, qty, price } = req.body;
+    const { id, name, description, quantity, price } = req.body;
     const existingProduct = await ProductModel.find({ id: id });
-    if (existingProduct.length > 0) {
-        return res.status(400).json({ error: `Product id already existed.` })
+    if (existingProduct.length > 0){
+        console.log(`existingProduct => ${existingProduct}`);
+        res.status(400).json({ error: 'Product with this ID already exists,\n try updaiting the product or new ID' })
     }
     try {
-        const product = await ProductModel.create({ id, name, description, qty, price });
+        const product = await ProductModel.create({ id, name, description, quantity, price });
         res.status(201).json(product)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -41,15 +42,14 @@ const createProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     const { id } = req.params;
-    const productToDelete = await ProductModel.find({ id: id });
-    if (productToDelete.length < 1) {
-        return res.status(404).json({ error: `Product was NOT found.` })
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: `Object id was NOT valid.` })
     }
-    const deletedProduct = await productModel.findOneAndDelete({ id:id });
+    const deletedProduct = await productModel.findOneAndDelete({ _id: id });
     if (!deletedProduct) {
-        return res.status(404).json({ error: `Product was NOT found.` })
+        return res.status(404).json({ error: `Product id was NOT found.` })
     }
-    res.status(200).json(deletedProduct,{message:`Item was deleted!`});
+    res.status(200).json(deletedProduct);
 }
 
 const updateProduct = async (req, res) => {

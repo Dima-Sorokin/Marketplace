@@ -3,24 +3,31 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
     id: {
         type: String,
-        require: true
+        required: true,
+        minLength: 9,
+        maxLength: 9
     },
-    name:{
-        type:String,
-        require: true
+    name: {
+        type: String,
+        required: true,
+        minLength: 3,
+        maxLength: 15
     },
-    description:{
-        type:String,
-        require:false
+    description: {
+        type: String,
+        required: false,
+        maxLength: 100
     },
-    qty:{
-        type:Number,
-        require:true
+    quantity: {
+        type: Number,
+        required: true,
+        min: 0
     },
-    price:{
-        type:Number,
-        require:true
+    price: {
+        type: Number,
+        required: true,
+        min: 0.1
     }
 
-},{timestamps:true});
-module.exports = mongoose.model(`Product`,productSchema);
+}, { timestamps: true });
+module.exports = mongoose.model(`Product`, productSchema);

@@ -13,7 +13,7 @@ app.use((req, res, next) => {
 })
 
 // //routes
-app.use(`/api/products`, productRoutes);
+app.use('/api/products', productRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
